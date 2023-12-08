@@ -1,0 +1,94 @@
+version: '3'
+
+networks:
+  chat_system_network:
+
+volumes:
+  development_db_volume:
+  test_db_volume:
+  rails_bundle:
+
+services:
+  development_db:
+    container_name: chat_system_development_db
+    image: mysql:5.7
+    volumes:
+      - development_db_volume:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: chat_system_development
+      MYSQL_USERNAME: user
+      MYSQL_PASSWORD: password
+    networks:
+      - chat_system_network
+
+  test_db:
+    container_name: chat_system_test_db
+    image: mysql:5.7
+    volumes:
+      - test_db_volume:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: chat_system_test
+      MYSQL_USERNAME: user
+      MYSQL_PASSWORD: password
+    networks:
+      - chat_system_network
+
+  app:
+    container_name: chat_system
+    hostname: chat_system
+    image: chat_system
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - 3000:3000
+    stdin_open: true
+    tty: true
+    depends_on:
+      - development_db
+      - test_db
+      - redis
+    environment:
+      DB_USERNAME: root
+      DB_PASSWORD: password
+      DB_HOST: development_db
+      DB_PORT: 3306
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-e", "development"]
+    volumes:
+      - ./:/app:cached
+      - rails_bundle:/bundle
+    networks:
+      - chat_system_network
+
+  redis:
+    container_name: chat_system_redis
+    image: redis:7-alpine
+    command: redis-server
+    networks:
+      - chat_system_network
+
+  sidekiq:
+    container_name: chat_system_sidekiq
+    command: bundle exec sidekiq
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      DB_USERNAME: root
+      DB_PASSWORD: password
+      DB_HOST: development_db
+      DB_PORT: 3306
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - development_db
+      - test_db
+      - redis
+    networks:
+      - chat_system_network
