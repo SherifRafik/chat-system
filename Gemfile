@@ -40,6 +40,9 @@ gem 'bootsnap', require: false
 # Serializer
 gem 'jsonapi-serializer'
 
+# Redis
+gem 'redis'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'byebug', '~> 11.1'
@@ -50,12 +53,12 @@ end
 
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  gem "spring"
   gem 'annotate'
   gem 'rubocop', '~> 1.58', require: false
   gem 'rubocop-performance', '~> 1.19', require: false
   gem 'rubocop-rails', '~> 2.22', require: false
   gem 'rubocop-rspec', '~> 2.25', require: false
+  gem 'spring'
 end
 
 group :test do
