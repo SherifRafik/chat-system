@@ -39,4 +39,8 @@ RSpec.describe Application do
       it { is_expected.to validate_numericality_of(:chats_count).is_greater_than_or_equal_to(0).only_integer }
     end
   end
+
+  describe 'associations' do
+    it { is_expected.to have_many(:chats) }
+  end
 end
