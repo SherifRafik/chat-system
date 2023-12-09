@@ -10,11 +10,9 @@ module Tokenable
   private
 
   def generate_token
-    token = SecureRandom.hex(16)
+    token = SecureRandom.hex(24)
 
-    while InMemoryDataStore.exists?(token)
-      token = SecureRandom.hex(16)
-    end
+    token = SecureRandom.hex(24) while InMemoryDataStore.exists?(token)
 
     self.token = token
   end

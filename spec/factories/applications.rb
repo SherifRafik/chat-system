@@ -19,7 +19,7 @@
 FactoryBot.define do
   factory :application do
     name { Faker::Company.name }
-    token { Faker::Internet.unique.uuid }
+    token { SecureRandom.hex(24) }
     chats_count { 0 }
   end
 end
