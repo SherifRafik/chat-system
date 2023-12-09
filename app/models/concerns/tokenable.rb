@@ -12,7 +12,7 @@ module Tokenable
   def generate_token
     token = SecureRandom.hex(24)
 
-    token = SecureRandom.hex(24) while InMemoryDataStore.exists?(token)
+    token = SecureRandom.hex(24) while InMemoryDataStore.hget?(APPLICATION_HASH_KEY, token).present?
 
     self.token = token
   end

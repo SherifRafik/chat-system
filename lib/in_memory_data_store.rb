@@ -17,11 +17,15 @@ class InMemoryDataStore
     REDIS.exists?(key)
   end
 
-  def self.hset(field, key, value)
-    REDIS.hset(field, key, value)
+  def self.hset(key, field, value)
+    REDIS.hset(key, field, value)
   end
 
-  def self.hgetall(field)
-    REDIS.hgetall(field)
+  def self.hgetall(key)
+    REDIS.hgetall(key)
+  end
+
+  def self.hget(key, field)
+    REDIS.hget(key, field)
   end
 end
