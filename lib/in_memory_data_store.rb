@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class InMemoryDataStore
-  def self.hincrby(key, field)
-    REDIS.hincrby(key, field)
+  def self.hincrby(key, field, increment = 1)
+    REDIS.hincrby(key, field, increment)
   end
 
   def self.hset(key, field, value)
