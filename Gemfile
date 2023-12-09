@@ -38,7 +38,7 @@ gem 'bootsnap', require: false
 # gem "rack-cors"
 
 # Serializer
-gem 'jsonapi-serializer'
+gem 'blueprinter'
 
 # Redis
 gem 'redis'
