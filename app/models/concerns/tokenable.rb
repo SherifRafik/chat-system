@@ -2,12 +2,12 @@
 
 module Tokenable
   extend ActiveSupport::Concern
-  
+
   included do
-    before_validation :generate_token
+    before_validation :generate_token, if: ->(tokenable) { tokenable.token.blank? }
   end
 
-  private 
+  private
 
   def generate_token
     token = SecureRandom.hex(16)
