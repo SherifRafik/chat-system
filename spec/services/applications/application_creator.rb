@@ -26,7 +26,7 @@ module Applications
           creator.call
           application = creator.application
           expect(InMemoryDataStore).to have_received(:hset).with(
-            APPLICATION_REDIS_HASH_KEY,
+            APPLICATION_HASH_KEY,
             application.token,
             application.chats_count
           ).once
