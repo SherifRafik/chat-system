@@ -7,6 +7,7 @@ volumes:
   development_db_volume:
   test_db_volume:
   rails_bundle:
+  redis_volume:
 
 services:
   development_db:
@@ -68,6 +69,8 @@ services:
     container_name: chat_system_redis
     image: redis:7-alpine
     command: redis-server
+    volumes:
+      - redis_volume:/data
     networks:
       - chat_system_network
 
