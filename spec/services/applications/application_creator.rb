@@ -11,7 +11,7 @@ module Applications
         let(:params) { { name: Faker::Company.name } }
 
         before do
-          allow(InMemoryDataStore).to receive(:set)
+          allow(InMemoryDataStore).to receive(:hset)
         end
 
         it 'returns true' do
@@ -25,7 +25,11 @@ module Applications
         it 'saves the application to the in memory data store' do
           creator.call
           application = creator.application
-          expect(InMemoryDataStore).to have_received(:set).with(application.token, application.chats_count).once
+          expect(InMemoryDataStore).to have_received(:hset).with(
+            APPLICATION_REDIS_HASH_KEY,
+            application.token,
+            application.chats_count
+          ).once
         end
       end
 

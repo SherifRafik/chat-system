@@ -10,7 +10,7 @@ module Applications
 
     def call
       if application.save
-        InMemoryDataStore.set(application.token, application.chats_count)
+        InMemoryDataStore.hset(APPLICATION_REDIS_HASH_KEY, application.token, application.chats_count)
         true
       else
         false
