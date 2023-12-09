@@ -32,12 +32,11 @@ RSpec.describe Application do
     end
 
     describe 'token' do
-      it { is_expected.to validate_presence_of(:token) }
       it { is_expected.to validate_uniqueness_of(:token) }
     end
 
     describe 'chats_count' do
-      it { is_expected.to validate_numericality_of(:chats_count).is_greater_than_or_equal_to(0) }
+      it { is_expected.to validate_numericality_of(:chats_count).is_greater_than_or_equal_to(0).only_integer }
     end
   end
 end

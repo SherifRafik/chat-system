@@ -22,5 +22,5 @@ class Application < ApplicationRecord
   # Validations
   validates :name, presence: true
   validates :token, presence: true, uniqueness: { case_sensitive: true }
-  validates :chats_count, numericality: { greater_than_or_equal_to: 0 }
+  validates :chats_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 end
