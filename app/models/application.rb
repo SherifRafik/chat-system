@@ -20,6 +20,7 @@
 
 class Application < ApplicationRecord
   include Tokenable
+  include SoftDeletable
 
   # Validations
   validates :name, presence: true

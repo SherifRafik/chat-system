@@ -45,4 +45,15 @@ RSpec.describe Application do
   describe 'associations' do
     it { is_expected.to have_many(:chats) }
   end
+
+  describe 'callback' do
+    describe 'set_deleted_at' do
+      before { allow(Time).to receive(:current).and_return(Time.zone.parse('2023-12-10 11:00:00')) }
+
+      it 'sets the deleted_at before destroying the application' do
+        application.destroy
+        expect(application.deleted_at).to eq(Time.current)
+      end
+    end
+  end
 end
