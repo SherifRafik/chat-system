@@ -6,7 +6,6 @@
 #
 #  id          :bigint           not null, primary key
 #  chats_count :integer          default(0), not null
-#  deleted_at  :datetime
 #  name        :string(255)      not null
 #  token       :string(255)      not null
 #  created_at  :datetime         not null
@@ -14,8 +13,7 @@
 #
 # Indexes
 #
-#  index_applications_on_deleted_at  (deleted_at)
-#  index_applications_on_token       (token) UNIQUE
+#  index_applications_on_token  (token) UNIQUE
 #
 
 FactoryBot.define do

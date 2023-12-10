@@ -10,15 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_10_194644) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_09_160701) do
   create_table "applications", charset: "utf8mb4", force: :cascade do |t|
     t.string "name", null: false
     t.string "token", null: false
     t.integer "chats_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_applications_on_deleted_at"
     t.index ["token"], name: "index_applications_on_token", unique: true
   end
 

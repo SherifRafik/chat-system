@@ -8,7 +8,6 @@ module Applications
 
     def call
       if application.valid?
-        application.update(deleted_at: Time.current)
         ApplicationDestroyerJob.perform_async(application.token)
         true
       else
