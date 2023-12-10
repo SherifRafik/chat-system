@@ -16,4 +16,8 @@ class InMemoryDataStore
   def self.hget(key, field)
     REDIS.hget(key, field)
   end
+
+  def self.hdel(key, field)
+    REDIS.hdel(key, field)
+  end
 end
