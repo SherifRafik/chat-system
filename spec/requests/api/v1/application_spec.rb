@@ -100,9 +100,8 @@ module Api
 
         before do
           allow(Applications::ApplicationDestroyer).to receive(:new).with(application: application).and_return(destroyer_double)
+          delete api_v1_application_path(application.token)
         end
-
-        before { delete api_v1_application_path(application.token) }
 
         it 'returns a successful response' do
           expect(response).to have_http_status(:no_content)
