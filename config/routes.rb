@@ -5,7 +5,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :applications, param: :token
+      resources :applications, param: :token do
+        resources :chats, param: :number, except: [:update]
+      end
     end
   end
 end
