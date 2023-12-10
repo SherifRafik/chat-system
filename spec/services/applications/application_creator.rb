@@ -25,11 +25,7 @@ module Applications
         it 'saves the application to the in memory data store' do
           creator.call
           application = creator.application
-          expect(InMemoryDataStore).to have_received(:hset).with(
-            APPLICATION_HASH_KEY,
-            application.token,
-            application.chats_count
-          ).once
+          expect(InMemoryDataStore).to have_received(:hset).with(APPLICATION_HASH_KEY, application.token, application.chats_count).once
         end
       end
 
