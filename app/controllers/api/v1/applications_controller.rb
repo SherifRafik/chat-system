@@ -33,8 +33,12 @@ module Api
       end
 
       def destroy
-        application.destroy
-        head :no_content
+        destroyer = Applications::ApplicationDestroyer.new(application: application)
+        if destroyer.call
+          head :no_content
+        else
+          render json: application.errors, status: :unprocessable_entity
+        end
       end
 
       private

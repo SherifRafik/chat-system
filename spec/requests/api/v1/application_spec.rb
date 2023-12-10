@@ -96,6 +96,11 @@ module Api
 
       describe 'DELETE #destroy' do
         let(:application) { create(:application) }
+        let(:destroyer_double) { instance_double(Applications::ApplicationDestroyer, call: true) }
+
+        before do
+          allow(Applications::ApplicationDestroyer).to receive(:new).with(application: application).and_return(destroyer_double)
+        end
 
         before { delete api_v1_application_path(application.token) }
 
@@ -103,8 +108,8 @@ module Api
           expect(response).to have_http_status(:no_content)
         end
 
-        it 'destroys the application' do
-          expect { application.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        it 'calls the destroyer service' do
+          expect(destroyer_double).to have_received(:call)
         end
       end
     end
