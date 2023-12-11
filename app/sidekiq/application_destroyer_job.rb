@@ -7,8 +7,8 @@ class ApplicationDestroyerJob
     ActiveRecord::Base.transaction do
       @application = Application.find_by(token: application_token)
       if application.present?
-        delete_application_from_memory_datastore(application)
-        delete_chats_from_memory_datastore(application)
+        delete_application_from_memory_datastore
+        delete_chats_from_memory_datastore
         application.destroy
       end
     end
