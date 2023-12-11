@@ -27,4 +27,8 @@ class Message < ApplicationRecord
 
   # Associations
   belongs_to :chat
+
+  # Delegations
+  delegate :application_token, to: :chat
+  delegate :number, to: :chat, prefix: true
 end
