@@ -3,8 +3,8 @@
 module Api
   module V1
     class ChatsController < ApplicationController
-      before_action :set_application, only: %i[index show destroy]
-      before_action :set_chat, only: %i[show destroy]
+      before_action :set_application, only: %i[index show]
+      before_action :set_chat, only: %i[show]
 
       def index
         chats = application.chats
@@ -28,11 +28,16 @@ module Api
       end
 
       def destroy
-        destroyer = Chats::ChatDestroyer.new(chat: chat)
-        if destroyer.call
-          head :no_content
+        generated_chat_key = KeyGenerator.generate_chat_key(application_token: params[:application_token], number: params[:number])
+        if InMemoryDataStore.hget(CHAT_HASH_KEY, generated_chat_key).present?
+          destroyer = Chats::ChatDestroyer.new(application_token: params[:application_token], number: params[:number])
+          if destroyer.call
+            head :no_content
+          else
+            render json: application.errors, status: :unprocessable_entity
+          end
         else
-          render json: application.errors, status: :unprocessable_entity
+          render json: { message: "Couldn't find a chat with number = #{params[:number]}" }, status: :not_found
         end
       end
 

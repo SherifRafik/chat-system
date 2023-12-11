@@ -2,24 +2,17 @@
 
 module Chats
   class ChatDestroyer
-    def initialize(chat:)
-      @chat = chat
+    def initialize(application_token:, number:)
+      @application_token = application_token
+      @number = number
     end
 
     def call
-      if chat.valid?
-        ChatDestroyerJob.perform_async(application.id, chat.number)
-      else
-        false
-      end
+      ChatDestroyerJob.perform_async(application_token, number)
     end
 
     private
 
-    attr_reader :chat
-
-    def application
-      chat.application
-    end
+    attr_reader :application_token, :number
   end
 end
