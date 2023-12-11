@@ -9,10 +9,6 @@ module Chats
     def call
       if application_exists_in_memory?
         create_chat
-      elsif application_exists_in_db?
-        # In memory database failure
-        persist_application_in_memory
-        create_chat
       else
         # Application is deleted
         false
@@ -21,19 +17,10 @@ module Chats
 
     private
 
-    attr_reader :application_token, :application
+    attr_reader :application_token
 
     def application_exists_in_memory?
       InMemoryDataStore.hget(APPLICATION_HASH_KEY, application_token).present?
-    end
-
-    def application_exists_in_db?
-      @application = Application.find_by(token: application_token)
-      @application.present?
-    end
-
-    def persist_application_in_memory
-      InMemoryDataStore.hset(APPLICATION_HASH_KEY, application.token, application.chats_count)
     end
 
     def generate_chat_key(number)
