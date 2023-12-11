@@ -28,6 +28,7 @@ class Chat < ApplicationRecord
 
   # Associations
   belongs_to :application
+  has_many :messages
 
   # Delegation
   delegate :token, to: :application, prefix: true

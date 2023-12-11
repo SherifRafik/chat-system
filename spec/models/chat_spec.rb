@@ -44,5 +44,6 @@ RSpec.describe Chat do
 
   describe 'associations' do
     it { is_expected.to belong_to(:application) }
+    it { is_expected.to have_many(:messages) }
   end
 end
