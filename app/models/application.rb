@@ -25,5 +25,5 @@ class Application < ApplicationRecord
   validates :chats_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   # Associations
-  has_many :chats, foreign_key: 'application_token', primary_key: 'token', dependent: :destroy, inverse_of: :application
+  has_many :chats
 end

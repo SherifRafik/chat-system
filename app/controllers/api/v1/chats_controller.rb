@@ -3,7 +3,7 @@
 module Api
   module V1
     class ChatsController < ApplicationController
-      before_action :set_application, only: %i[index]
+      before_action :set_application, only: %i[index show destroy]
       before_action :set_chat, only: %i[show destroy]
 
       def index
@@ -37,7 +37,7 @@ module Api
       attr_reader :application, :chat
 
       def set_chat
-        @chat = Chat.find_by!(number: params[:number], application_token: params[:application_token])
+        @chat = application.chats.find_by!(number: params[:number])
       end
 
       def set_application

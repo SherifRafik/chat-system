@@ -2,21 +2,21 @@
 #
 # Table name: chats
 #
-#  id                :bigint           not null, primary key
-#  application_token :string(255)      not null
-#  messages_count    :integer          default(0), not null
-#  number            :integer          not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  id             :bigint           not null, primary key
+#  messages_count :integer          default(0), not null
+#  number         :integer          not null
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  application_id :bigint           not null
 #
 # Indexes
 #
-#  fk_rails_e72f51c06b                          (application_token)
-#  index_chats_on_number_and_application_token  (number,application_token) UNIQUE
+#  index_chats_on_application_id             (application_id)
+#  index_chats_on_number_and_application_id  (number,application_id) UNIQUE
 #
 # Foreign Keys
 #
-#  fk_rails_...  (application_token => applications.token) ON DELETE => cascade
+#  fk_rails_...  (application_id => applications.id) ON DELETE => cascade
 #
 
 FactoryBot.define do
