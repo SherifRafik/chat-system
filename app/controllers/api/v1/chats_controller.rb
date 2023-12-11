@@ -28,7 +28,8 @@ module Api
       end
 
       def destroy
-        generated_chat_key = KeyGenerator.generate_chat_key(application_token: params[:application_token], number: params[:number])
+        generated_chat_key = KeyGenerator.generate_chat_key(application_token: params[:application_token],
+                                                            number: params[:number])
         if InMemoryDataStore.hget(CHAT_HASH_KEY, generated_chat_key).present?
           destroyer = Chats::ChatDestroyer.new(application_token: params[:application_token], number: params[:number])
           if destroyer.call
