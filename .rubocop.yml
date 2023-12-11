@@ -20,3 +20,8 @@ Layout/TrailingEmptyLines:
   Enabled: true
 Layout/TrailingWhitespace:
   Enabled: true
+
+Metrics/MethodLength:
+  Description: 'Avoid methods longer than 30 lines of code.'
+  Enabled: true
+  Max: 30
