@@ -39,7 +39,9 @@ module Api
         end
 
         context 'when the chat number is not valid' do
-          before { get api_v1_application_chat_path(application_token: application.token, number: (Random.rand * 10).ceil) }
+          before do
+            get api_v1_application_chat_path(application_token: application.token, number: (Random.rand * 10).ceil)
+          end
 
           it 'returns not_found status' do
             expect(response).to have_http_status(:not_found)

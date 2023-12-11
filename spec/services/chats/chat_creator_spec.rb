@@ -29,7 +29,8 @@ module Chats
 
           it 'persists the application in memory' do
             creator.call
-            expect(InMemoryDataStore).to have_received(:hset).with(APPLICATION_HASH_KEY, application.token, application.chats_count).once
+            expect(InMemoryDataStore).to have_received(:hset).with(APPLICATION_HASH_KEY, application.token,
+                                                                   application.chats_count).once
           end
 
           it 'calls the chat creator job' do
