@@ -19,7 +19,7 @@ module Chats
       end
     end
 
-    private 
+    private
 
     attr_reader :application_token, :application
 
