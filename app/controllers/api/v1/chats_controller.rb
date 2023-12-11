@@ -28,15 +28,9 @@ module Api
       end
 
       def destroy
-        generated_chat_key = KeyGenerator.generate_chat_key(application_token: params[:application_token],
-                                                            number: params[:number])
-        if InMemoryDataStore.hget(CHAT_HASH_KEY, generated_chat_key).present?
-          destroyer = Chats::ChatDestroyer.new(application_token: params[:application_token], number: params[:number].to_i)
-          if destroyer.call
-            head :no_content
-          else
-            render json: application.errors, status: :unprocessable_entity
-          end
+        destroyer = Chats::ChatDestroyer.new(application_token: params[:application_token], number: params[:number].to_i)
+        if destroyer.call
+          head :no_content
         else
           render json: { message: "Couldn't find a chat with number = #{params[:number]}" }, status: :not_found
         end
