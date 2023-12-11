@@ -64,6 +64,24 @@ module Api
           expect(creator_double).to have_received(:call)
         end
       end
+
+      describe 'DELETE #destroy' do
+        let(:destroyer_double) { instance_double(Chats::ChatDestroyer, call: true) }
+        let(:chat) { create(:chat, application: application) }
+
+        before do
+          allow(Chats::ChatDestroyer).to receive(:new).with(chat: chat).and_return(destroyer_double)
+          delete api_v1_application_chat_path(application_token: application.token, number: chat.number)
+        end
+
+        it 'returns a successful response' do
+          expect(response).to have_http_status(:no_content)
+        end
+
+        it 'calls the destroyer service' do
+          expect(destroyer_double).to have_received(:call)
+        end
+      end
     end
   end
 end

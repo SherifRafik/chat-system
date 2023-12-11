@@ -28,8 +28,12 @@ module Api
       end
 
       def destroy
-        chat.destroy
-        head :no_content
+        destroyer = Chats::ChatDestroyer.new(chat: chat)
+        if destroyer.call
+          head :no_content
+        else
+          render json: application.errors, status: :unprocessable_entity
+        end
       end
 
       private
