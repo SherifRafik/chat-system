@@ -28,7 +28,8 @@ module Api
       end
 
       def destroy
-        destroyer = Chats::ChatDestroyer.new(application_token: params[:application_token], number: params[:number].to_i)
+        destroyer = Chats::ChatDestroyer.new(application_token: params[:application_token],
+                                             number: params[:number].to_i)
         if destroyer.call
           head :no_content
         else

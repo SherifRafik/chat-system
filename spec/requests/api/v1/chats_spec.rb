@@ -72,7 +72,8 @@ module Api
         let(:chat) { create(:chat, application: application) }
 
         before do
-          allow(Chats::ChatDestroyer).to receive(:new).with(application_token: chat.application_token, number: chat.number).and_return(destroyer_double)
+          allow(Chats::ChatDestroyer).to receive(:new).with(application_token: chat.application_token,
+                                                            number: chat.number).and_return(destroyer_double)
           delete api_v1_application_chat_path(application_token: application.token, number: chat.number)
         end
 
