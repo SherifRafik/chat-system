@@ -15,9 +15,11 @@ class MessageDestroyerJob
           message = chat.messages.find_by(number: number)
           if message.present?
             message.destroy
-          elsif message_count_in_memory.present? && message_count_in_memory.to_i >= number
+          elsif chat_exists_in_memory? && message_count_in_memory.to_i >= number
             MessageDestroyerJob.perform_in(30.seconds, application_token, chat_number, number)
           end
+        elsif chat_exists_in_memory?
+          MessageDestroyerJob.perform_in(30.seconds, application_token, chat_number, number)
         end
       end
     end
@@ -29,6 +31,10 @@ class MessageDestroyerJob
 
   def message_count_in_memory
     InMemoryDataStore.hget(CHAT_HASH_KEY, generate_chat_key)
+  end
+
+  def chat_exists_in_memory?
+    message_count_in_memory.present?
   end
 
   def generate_chat_key
