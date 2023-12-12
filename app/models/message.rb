@@ -22,6 +22,9 @@
 #
 
 class Message < ApplicationRecord
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
   # Validations
   validates :number, presence: true, uniqueness: { scope: :chat_id }
 
@@ -31,4 +34,36 @@ class Message < ApplicationRecord
   # Delegations
   delegate :application_token, to: :chat
   delegate :number, to: :chat, prefix: true
+  delegate :key, to: :chat, prefix: true
+
+  settings do
+    mapping dynamic: false do
+      indexes :chat_key, type: :text, analyzer: 'english'
+      indexes :body, type: :text, analyzer: 'english'
+    end
+  end
+
+  # Choose the fields included in the object that is sent to ES
+  def as_indexed_json(_options = nil)
+    as_json(only: %i[body], methods: :chat_key)
+  end
+
+  def self.search(query, chat_key)
+    __elasticsearch__.search(
+      {
+        query: {
+          bool: {
+            must: [
+              {
+                wildcard: { body: "*#{query}*" }
+              }
+            ],
+            filter: [
+              { term: { chat_key: chat_key } }
+            ]
+          }
+        }
+      }
+    ).records.to_a
+  end
 end
