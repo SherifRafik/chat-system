@@ -6,13 +6,16 @@ module Messages
   RSpec.describe MessageCreator do
     describe '#call' do
       let(:params) { { body: Faker::Lorem.sentence } }
-      let(:creator) { described_class.new(params: params, application_token: application.token, chat_number: chat.number) }
+      let(:creator) do
+        described_class.new(params: params, application_token: application.token, chat_number: chat.number)
+      end
       let(:chat) { create(:chat) }
       let(:application) { chat.application }
 
       context 'when chat exists in memory' do
         before do
-          allow(InMemoryDataStore).to receive(:hget).with(CHAT_HASH_KEY, "#{application.token}_#{chat.number}").and_return('1')
+          allow(InMemoryDataStore).to receive(:hget).with(CHAT_HASH_KEY,
+                                                          "#{application.token}_#{chat.number}").and_return('1')
           allow(MessageCreatorJob).to receive(:perform_async)
         end
 
@@ -24,7 +27,8 @@ module Messages
 
       context 'when chat doesnt exist in memory' do
         before do
-          allow(InMemoryDataStore).to receive(:hget).with(CHAT_HASH_KEY, "#{application.token}_#{chat.number}").and_return(nil)
+          allow(InMemoryDataStore).to receive(:hget).with(CHAT_HASH_KEY,
+                                                          "#{application.token}_#{chat.number}").and_return(nil)
         end
 
         it 'returns false' do

@@ -9,7 +9,7 @@ module Messages
     end
 
     def call
-      if chat_exists_in_memory?
+      if InMemoryDataStore.hget(CHAT_HASH_KEY, generate_chat_key).present?
         create_message
       else
         false
@@ -22,10 +22,6 @@ module Messages
 
     def generate_chat_key
       KeyGenerator.generate_chat_key(application_token: application_token, number: chat_number)
-    end
-
-    def chat_exists_in_memory?
-      InMemoryDataStore.hget(CHAT_HASH_KEY, generate_chat_key).present?
     end
 
     def create_message
