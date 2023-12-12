@@ -32,4 +32,8 @@ class Chat < ApplicationRecord
 
   # Delegation
   delegate :token, to: :application, prefix: true
+
+  def key
+    KeyGenerator.generate_chat_key(application_token: application.token, number: number)
+  end
 end
