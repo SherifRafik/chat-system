@@ -10,7 +10,7 @@ class MessageUpdaterJob
     ActiveRecord::Base.transaction do
       application = Application.find_by(token: application_token)
       if application.present?
-        chat = application.chats.find_by(number: chat_number)
+        @chat = application.chats.find_by(number: chat_number)
         if chat.present?
           message = chat.messages.find_by(number: number)
           if message.present?
@@ -27,10 +27,10 @@ class MessageUpdaterJob
 
   private
 
-  attr_reader :application_token, :chat_number
+  attr_reader :chat
 
   def message_count_in_memory
-    InMemoryDataStore.hget(CHAT_HASH_KEY, generate_chat_key)
+    InMemoryDataStore.hget(CHAT_HASH_KEY, chat.key)
   end
 
   def chat_exists_in_memory?

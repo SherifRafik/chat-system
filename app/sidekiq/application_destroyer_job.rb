@@ -27,8 +27,7 @@ class ApplicationDestroyerJob
     # Delete the chats from redis (to prevent the message creator job from queuing)
     chats = application.chats
     chats.each do |chat|
-      generated_chat_key = KeyGenerator.generate_chat_key(application_token: application.token, number: chat.number)
-      InMemoryDataStore.hdel(CHAT_HASH_KEY, generated_chat_key)
+      InMemoryDataStore.hdel(CHAT_HASH_KEY, chat.key)
     end
   end
 end

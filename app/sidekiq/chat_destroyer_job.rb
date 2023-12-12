@@ -25,15 +25,11 @@ class ChatDestroyerJob
   attr_reader :application, :chat
 
   def delete_chat_from_memory_datastore
-    InMemoryDataStore.hdel(CHAT_HASH_KEY, generate_chat_key)
-  end
-
-  def generate_chat_key
-    KeyGenerator.generate_chat_key(application_token: application.token, number: chat.number)
+    InMemoryDataStore.hdel(CHAT_HASH_KEY, chat.key)
   end
 
   def chat_exists_in_memory?
-    InMemoryDataStore.hget(CHAT_HASH_KEY, generate_chat_key).present?
+    InMemoryDataStore.hget(CHAT_HASH_KEY, chat.key).present?
   end
 
   def decrement_chats_count_in_application
