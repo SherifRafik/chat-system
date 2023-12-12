@@ -9,7 +9,7 @@ module Messages
     end
 
     def call
-      if message_count_in_memory.present? && message_count_in_memory.to_i >= number
+      if chat_exists_in_memory? && message_count_in_memory.to_i >= number
         MessageDestroyerJob.perform_async(application_token, chat_number, number)
       else
         false
@@ -22,6 +22,10 @@ module Messages
 
     def message_count_in_memory
       InMemoryDataStore.hget(CHAT_HASH_KEY, generate_chat_key)
+    end
+
+    def chat_exists_in_memory?
+      message_count_in_memory.present?
     end
 
     def generate_chat_key
