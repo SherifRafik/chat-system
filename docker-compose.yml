@@ -8,6 +8,7 @@ volumes:
   test_db_volume:
   rails_bundle:
   redis_volume:
+  elasticsearch_volume:
 
 services:
   development_db:
@@ -51,6 +52,7 @@ services:
       - development_db
       - test_db
       - redis
+      - elasticsearch
     environment:
       DB_USERNAME: root
       DB_PASSWORD: password
@@ -58,6 +60,7 @@ services:
       DB_PORT: 3306
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      ELASTIC_SEARCH_HOST: elasticsearch
     command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-e", "development"]
     volumes:
       - ./:/app:cached
@@ -89,9 +92,31 @@ services:
       DB_PORT: 3306
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      ELASTIC_SEARCH_HOST: elasticsearch
     depends_on:
       - development_db
       - test_db
       - redis
+      - elasticsearch
+    networks:
+      - chat_system_network
+
+  elasticsearch:
+    container_name: chat_system_elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.16
+    environment:
+      - cluster.name=docker-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      # ES_JAVA_OPTS environment variable to manually set the heap size to 512MB. We do not recommend using ES_JAVA_OPTS in production
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - 9200:9200
+    volumes:
+      - elasticsearch_volume:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     networks:
       - chat_system_network
