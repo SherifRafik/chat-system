@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :applications, param: :token do
         resources :chats, param: :number, except: [:update] do
+          get 'messages/search', to: 'chats#search_messages'
           resources :messages, param: :number
         end
       end
