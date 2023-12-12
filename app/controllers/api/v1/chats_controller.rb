@@ -37,6 +37,18 @@ module Api
         end
       end
 
+      def search_messages
+        application_token = params[:application_token]
+        number = params[:chat_number]
+        searcher = Chats::MessageSearcher.new(application_token: application_token, number: number,
+                                              search_query: search_params[:query])
+        if searcher.call
+          render json: messages_serializer(searcher.result)
+        else
+          render json: { message: "Couldn't find a chat with number = #{number}" }, status: :not_found
+        end
+      end
+
       private
 
       attr_reader :application, :chat
@@ -53,8 +65,16 @@ module Api
         params.require(:chat).permit
       end
 
+      def search_params
+        params.require(:chat).permit(:query)
+      end
+
       def serialize(data)
         Api::V1::ChatBlueprint.render(data)
+      end
+
+      def messages_serializer(data)
+        Api::V1::MessageBlueprint.render(data)
       end
     end
   end
