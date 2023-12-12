@@ -10,7 +10,6 @@ class ChatDestroyerJob
         @chat = application.chats.find_by(number: number)
         if chat.present?
           delete_chat_from_memory_datastore(application_token, number)
-          delete_messages_from_memory_datastore
           chat.destroy
         elsif chat_exists_in_memory?(application_token, number)
           ChatDestroyerJob.perform_in(30.seconds, application_token, number)
@@ -29,10 +28,6 @@ class ChatDestroyerJob
 
   def generate_chat_key(application_token, number)
     KeyGenerator.generate_chat_key(application_token: application_token, number: number)
-  end
-
-  def delete_messages_from_memory_datastore
-    # TODO: Implement this when adding the messages
   end
 
   def chat_exists_in_memory?(application_token, number)
