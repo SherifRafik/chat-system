@@ -45,6 +45,7 @@ gem 'redis'
 
 # Sidekiq
 gem 'sidekiq'
+gem 'sidekiq-scheduler'
 
 # Elastic search
 gem 'elasticsearch-model'
