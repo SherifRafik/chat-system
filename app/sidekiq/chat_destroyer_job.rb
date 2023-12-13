@@ -4,10 +4,13 @@ class ChatDestroyerJob
   include Sidekiq::Job
 
   def perform(application_token, number)
+    @application_token = application_token
+    @number = number
+
     ActiveRecord::Base.transaction do
       @application = Application.lock.find_by(token: application_token)
       if application.present?
-        @chat = application.chats.find_by(number: number)
+        chat = application.chats.find_by(number: number)
         if chat.present?
           delete_chat_from_memory_datastore
           chat.destroy
@@ -22,14 +25,18 @@ class ChatDestroyerJob
 
   private
 
-  attr_reader :application, :chat
+  attr_reader :application, :application_token, :number
 
   def delete_chat_from_memory_datastore
-    InMemoryDataStore.hdel(CHAT_HASH_KEY, chat.key)
+    InMemoryDataStore.hdel(CHAT_HASH_KEY, generate_chat_key)
+  end
+
+  def generate_chat_key
+    KeyGenerator.generate_chat_key(application_token: application_token, number: number)
   end
 
   def chat_exists_in_memory?
-    InMemoryDataStore.hget(CHAT_HASH_KEY, chat.key).present?
+    InMemoryDataStore.hget(CHAT_HASH_KEY, generate_chat_key).present?
   end
 
   def decrement_chats_count_in_application
