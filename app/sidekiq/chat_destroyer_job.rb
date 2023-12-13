@@ -14,8 +14,8 @@ class ChatDestroyerJob
         if chat.present?
           delete_chat_from_memory_datastore
           chat.destroy
-          decrement_chats_count_in_application
           decrement_chats_count_in_memory
+          decrement_chats_count_in_application
         elsif chat_exists_in_memory?
           ChatDestroyerJob.perform_in(30.seconds, application_token, number)
         end
@@ -40,7 +40,7 @@ class ChatDestroyerJob
   end
 
   def decrement_chats_count_in_application
-    updated_chats_count = application.chats_count - 1
+    updated_chats_count = InMemoryDataStore.hget(APPLICATION_HASH_KEY, application.token)
     application.update(chats_count: updated_chats_count)
   end
 

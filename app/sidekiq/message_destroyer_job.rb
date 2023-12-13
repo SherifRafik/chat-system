@@ -10,13 +10,13 @@ class MessageDestroyerJob
     ActiveRecord::Base.transaction do
       application = Application.find_by(token: application_token)
       if application.present?
-        chat = Chat.lock.find_by(application_id: application.id, number: chat_number)
+        @chat = Chat.lock.find_by(application_id: application.id, number: chat_number)
         if chat.present?
           message = chat.messages.find_by(number: number)
           if message.present?
             message.destroy
-            decrement_messages_count_in_chat
             decrement_messages_count_in_memory
+            decrement_messages_count_in_chat
           elsif chat_exists_in_memory? && message_count_in_memory.to_i >= number
             MessageDestroyerJob.perform_in(30.seconds, application_token, chat_number, number)
           end
@@ -29,7 +29,7 @@ class MessageDestroyerJob
 
   private
 
-  attr_reader :application_token, :chat_number
+  attr_reader :application_token, :chat_number, :chat
 
   def message_count_in_memory
     InMemoryDataStore.hget(CHAT_HASH_KEY, generate_chat_key)
@@ -40,7 +40,7 @@ class MessageDestroyerJob
   end
 
   def decrement_messages_count_in_chat
-    updated_messages_count = chat.messages_count - 1
+    updated_messages_count = InMemoryDataStore.hget(CHAT_HASH_KEY, generate_chat_key)
     chat.update(messages_count: updated_messages_count)
   end
 
