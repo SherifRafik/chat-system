@@ -9,7 +9,7 @@ class ChatCreatorJob
 
       if application.present?
         Chat.create(application: application, number: number)
-        updated_chats_count = application.chats_count + 1
+        updated_chats_count = InMemoryDataStore.hget(APPLICATION_HASH_KEY, application_token)
         application.update(chats_count: updated_chats_count)
       end
     end
