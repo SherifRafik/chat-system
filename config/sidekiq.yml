@@ -1,0 +1,5 @@
+:scheduler:
+  :schedule:
+    count_updater:
+      every: '40m'
+      class: CountUpdaterJob
