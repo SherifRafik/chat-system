@@ -3,7 +3,7 @@
 module Api
   module V1
     class ChatsController < ApplicationController
-      before_action :set_application, only: %i[index show]
+      before_action :set_application, only: %i[index]
       before_action :set_chat, only: %i[show]
 
       def index
@@ -54,11 +54,15 @@ module Api
       attr_reader :application, :chat
 
       def set_chat
-        @chat = application.chats.find_by!(number: params[:number])
+        @chat = Chat.find_by_key(chat_key)
       end
 
       def set_application
         @application = Application.find_by!(token: params[:application_token])
+      end
+
+      def chat_key
+        KeyGenerator.generate_chat_key(application_token: params[:application_token], number: params[:number])
       end
 
       def chat_params

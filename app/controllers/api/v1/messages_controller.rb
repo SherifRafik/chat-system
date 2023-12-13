@@ -68,8 +68,11 @@ module Api
       end
 
       def set_chat
-        application = Application.find_by!(token: params[:application_token])
-        @chat = application.chats.find_by!(number: params[:chat_number])
+        @chat = Chat.find_by_key(chat_key)
+      end
+
+      def chat_key
+        KeyGenerator.generate_chat_key(application_token: params[:application_token], number: params[:chat_number])
       end
 
       def serialize(data)

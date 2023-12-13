@@ -40,4 +40,8 @@ class Chat < ApplicationRecord
   def self.find_by_keys(keys)
     joins(:application).where("CONCAT(applications.token, '_', chats.number) IN (?)", keys)
   end
+
+  def self.find_by_key(key)
+    joins(:application).find_by!("CONCAT(applications.token, '_', chats.number) IN (?)", key)
+  end
 end
