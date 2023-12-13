@@ -36,4 +36,8 @@ class Chat < ApplicationRecord
   def key
     KeyGenerator.generate_chat_key(application_token: application.token, number: number)
   end
+
+  def self.find_by_keys(keys)
+    joins(:application).where("CONCAT(applications.token, '_', chats.number) IN (?)", keys)
+  end
 end
