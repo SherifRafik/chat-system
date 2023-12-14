@@ -14,9 +14,9 @@ git clone https://github.com/SherifRafik/chat-system.git
 docker-compose up
 ```
 
-After finished the build, you can access the application using http://localhost:3000
+After finishing the build, you can access the application using http://localhost:3000
 
-You can access Sidekiq dashboard through http://localhost:3000/sidekiq
+You can access the Sidekiq dashboard at http://localhost:3000/sidekiq
 
 ## Environment
   - Ruby 3.0.3
@@ -121,7 +121,7 @@ You can access Sidekiq dashboard through http://localhost:3000/sidekiq
   ```
 
 ### Chats
-#### Create chat for a specific application
+#### Create a chat for a specific application
 - Endpoint: `POST /api/v1/applications/:token/chats`
 - Response:
   ```json
@@ -145,7 +145,7 @@ You can access Sidekiq dashboard through http://localhost:3000/sidekiq
   ]
   ```
 
-#### Get chat for a specific application
+#### Get a chat for a specific application
 - Endpoint: `GET /api/v1/applications/:token/chats/:number`
 - Response:
   ```json
@@ -235,7 +235,7 @@ You can access Sidekiq dashboard through http://localhost:3000/sidekiq
   ]
   ```
 
-#### Get message for a specific chat
+#### Get a message for a specific chat
 - Endpoint: `GET /api/v1/applications/:token/chats/:chatNumber/messages/:number`
 - Response:
   ```json
@@ -248,7 +248,7 @@ You can access Sidekiq dashboard through http://localhost:3000/sidekiq
   }
   ```
 
-#### Partial search all the messages of a specific chat
+#### Partial search of all the messages of a specific chat
 - Endpoint: `GET /api/v1/applications/:token/chats/:chatNumber/messages/search`
 - Body:
   ```json
@@ -271,7 +271,7 @@ You can access Sidekiq dashboard through http://localhost:3000/sidekiq
     {
         "number": 5,
         "chat_number": 2,
-        "body": "Let's try maching on feat",
+        "body": "Let's try matching on feat",
         "created_at": "2023-12-13 23:47:59 UTC",
         "updated_at": "2023-12-13 23:47:59 UTC"
     }
