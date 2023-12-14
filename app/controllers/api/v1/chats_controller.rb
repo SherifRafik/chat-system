@@ -70,7 +70,7 @@ module Api
       end
 
       def search_params
-        params.require(:chat).permit(:query)
+        params.require(:message).permit(:query)
       end
 
       def serialize(data)
