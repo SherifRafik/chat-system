@@ -253,7 +253,7 @@ You can access the Sidekiq dashboard at http://localhost:3000/sidekiq
 - Body:
   ```json
   {
-    "message": {
+    "chat": {
         "query": "feat"
     }
   }
